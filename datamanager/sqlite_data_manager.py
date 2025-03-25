@@ -40,10 +40,11 @@ class SQLiteDataManager(DataManagerInterface):
                     username=new_user["username"],
                     email=new_user["email"],
                     first_name=new_user["first_name"],
-                    last_name=new_user["last_name"],
+                    last_name=new_user["last_name"]
                 )
             )
             self.session.commit()
+            print(new_user)
         except Exception as e:
             self.session.rollback()
 
@@ -79,32 +80,31 @@ class SQLiteDataManager(DataManagerInterface):
             return None
 
 
-    """def add_movie(self, new_movie: str):
-        """'add movie to db'"""
+    def add_movie(self,user_id, title, director, year, rating):
+        """add movie to db"""
         try:
             # Get movie data from OMDI API
-            with OMDIInterface(new_movie) as omdb:
-                response = omdb.parse_data()
-                if not response:
-                    return
 
-                movie_director, movie_release_date, movie_rating = response
+
+
 
             # Add movie to the database
-            self.session.add(
-                Movie(
-                    movie_name=new_movie,
-                    movie_director=movie_director,
-                    movie_release_date=movie_release_date,
-                    movie_rating=movie_rating,
-                )
+
+
+            new_movie = Movie(
+                movie_name=title,
+                movie_director=director,
+                movie_release_date=year,
+                movie_rating=rating,
             )
+
+            self.session.add(new_movie)
             self.session.commit()
-            return True
+            return new_movie.movie_id
 
         except Exception as e:
             self.session.rollback()
-"""
+
 
     def update_movie(self, movie_id, updated_movie):
         movie = self.get_movie_from_id(movie_id)
@@ -115,10 +115,14 @@ class SQLiteDataManager(DataManagerInterface):
             movie.movie_rating = updated_movie["movie_rating"]
             self.session.commit()
 
-    @override
-    def delete_movie(self, movie_id):
+
+    def delete_movie(self, user_id, movie_id):
         """delete movie from database"""
-        movie = self.get_movie_from_id(movie_id)
+        movie = self.session.query(UserMovie).filter(
+            UserMovie.user_id == user_id,
+            UserMovie.movie_id == movie_id
+        ).first()
+
         if movie:
             self.session.delete(movie)
             self.session.commit()
@@ -142,7 +146,6 @@ class SQLiteDataManager(DataManagerInterface):
     def get_user_movies(self, user_id):
         """get user movies from database"""
         user = self.get_user_from_id(user_id)
-
         return user.movies
 
     def add_user_movie(self, user_id, movie_id):

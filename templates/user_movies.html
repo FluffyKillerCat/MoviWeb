@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>User Movies</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            text-align: center;
+            margin: 0;
+            padding: 0;
+        }
+        .container {
+            max-width: 600px;
+            margin: 50px auto;
+            background: white;
+            padding: 20px;
+            box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+            border-radius: 10px;
+        }
+        h1 {
+            color: #333;
+        }
+        ul {
+            list-style: none;
+            padding: 0;
+        }
+        li {
+            background: #007bff;
+            color: white;
+            padding: 10px;
+            margin: 10px 0;
+            border-radius: 5px;
+        }
+        .add-movie {
+            display: inline-block;
+            margin-top: 20px;
+            padding: 10px 15px;
+            background: #28a745;
+            color: white;
+            text-decoration: none;
+            border-radius: 5px;
+        }
+        .back-link {
+            display: block;
+            margin-top: 15px;
+            text-decoration: none;
+            color: #007bff;
+        }
+        .back-link:hover {
+            text-decoration: underline;
+        }
+        .no-movies {
+            color: #666;
+            font-style: italic;
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+{% include "navbar.html" %}
+    <div class="container">
+        <h1>{{ user.first_name }} {{ user.last_name }}'s Favorite Movies</h1>
+        {% if movies %}
+        <ul>
+            {% for movie in movies %}
+            <li>
+    <strong>{{ movie.movie_name }}</strong> ({{ movie.movie_release_date }}) - {{ movie.movie_genre }}<br>
+    Directed by {{ movie.movie_director }}<br>
+    <button onclick="location.href='/users/{{ user.user_id }}/delete_movie/{{ movie.movie_id }}'" style="background-color: #dc3545; color: white; border: none; padding: 5px 10px; border-radius: 5px; cursor: pointer;">Delete</button>
+    <button onclick="location.href='/users/{{ user.user_id }}/update_movie/{{ movie.movie_id }}'" style="background-color: #ffc107; color: black; border: none; padding: 5px 10px; border-radius: 5px; cursor: pointer; margin-left: 10px;">Update</button>
+</li>
+
+
+
+            {% endfor %}
+        </ul>
+        {% else %}
+        <p class="no-movies">No favorite movies yet. Add one now!</p>
+        {% endif %}
+        <a class="add-movie" href="/users/{{ user.user_id }}/add_movie">+ Add Movie</a>
+        <a class="back-link" href="/users">&larr; Back to Users List</a>
+    </div>
+</body>
+</html>

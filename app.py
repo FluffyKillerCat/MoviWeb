@@ -11,19 +11,15 @@ db.init_app(app)
 register_blueprints(app)
 data_manager = SQLiteDataManager()
 
+with app.app_context():
+    db.create_all()
+
 @app.route('/')
 def home():
     return render_template('home.html')
 
 
-
-
-
-
-
-@app.errorhandler(404)
-def page_not_found(e):
-    return "404, page not found", 404
-
 if __name__ == '__main__':
+    with app.app_context():
+        db.create_all()
     app.run(debug=True)

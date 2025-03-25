@@ -1,0 +1,15 @@
+{% extends "base.html" %}
+
+{% block title %}Home{% endblock %}
+
+{% block content %}
+<div class="container">
+    <h1>Welcome to the Movie Management App</h1>
+    <p>Manage your users and their favorite movies effortlessly!</p>
+    <div style="margin-top: 30px;">
+        <a href="/users" style="display: inline-block; padding: 10px 20px; background: #007bff; color: white; text-decoration: none; border-radius: 5px; margin: 5px;">View Users</a>
+        <a href="/add_user" style="display: inline-block; padding: 10px 20px; background: #28a745; color: white; text-decoration: none; border-radius: 5px; margin: 5px;">Add User</a>
+        <a href="/add_movie" style="display: inline-block; padding: 10px 20px; background: #ffc107; color: black; text-decoration: none; border-radius: 5px; margin: 5px;">Add Movie</a>
+    </div>
+</div>
+{% endblock %}

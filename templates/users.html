@@ -65,23 +65,31 @@
     </style>
 </head>
 <body>
+{% include "navbar.html" %}
     <div class="container">
         <h1>Registered Users</h1>
         {% if users %}
-        <ul>
-            {% for user in users %}
-            <li>
-                <div class="user-info">{{ user.first_name }} {{ user.last_name }} ({{ user.username }})</div>
-                <div class="actions">
-                    <a href="/users/{{ user.user_id }}"><i class="fas fa-film"></i> Movies</a>
-                </div>
-            </li>
-            {% endfor %}
-        </ul>
-        {% else %}
-        <p class="no-users">No registered users yet. Be the first to add one!</p>
-        {% endif %}
-        <a class="add-user" href="/add_user">+ Add User</a>
+<ul>
+    {% for user in users %}
+    <li>
+        <div class="user-info">{{ user.first_name }} {{ user.last_name }} ({{ user.username }})</div>
+        <div class="actions">
+            <a href="/users/{{ user.user_id }}"><i class="fas fa-film"></i> Movies</a>
+            <form action="/update_user/{{ user.user_id }}" method="PUT" style="display:inline;">
+                <button type="submit" class="update-button"><i class="fas fa-edit"></i> Update</button>
+            </form>
+            <form action="/delete_user/{{ user.user_id }}" method="POST" style="display:inline;">
+                <button type="submit" class="delete-button"><i class="fas fa-trash"></i> Delete</button>
+            </form>
+        </div>
+    </li>
+    {% endfor %}
+</ul>
+{% else %}
+<p class="no-users">No registered users yet. Be the first to add one!</p>
+{% endif %}
+<a class="add-user" href="/add_user">+ Add User</a>
+
     </div>
 </body>
 </html>
