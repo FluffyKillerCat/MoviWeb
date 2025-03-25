@@ -92,3 +92,36 @@ def add_user():
         return redirect(url_for('user.list_users'))
 
     return render_template('add_user.html')
+@user.route('/update_user/<int:user_id>', methods=['GET', 'POST'])
+def update_user(user_id):
+    """
+    Update a user's information in the database.
+
+    Handles both GET and POST methods:
+    - GET: Displays the 'update_user.html' form pre-filled with existing user data.
+    - POST: Processes the submitted form data to update the user's information.
+
+    Args:
+        user_id (int): The unique identifier of the user to update.
+
+    Returns:
+        - On GET: Rendered HTML form pre-filled with user details.
+        - On POST: Redirect response to the user list page after updating the user.
+    """
+    user_data = data_manager.get_user_from_id(user_id)
+
+    if request.method == 'POST':
+        # Collect form data
+        new_user = {
+            "username": request.form['username'],
+            "email": request.form['email'],
+            "first_name": request.form['first_name'],
+            "last_name": request.form['last_name']
+        }
+
+        # Update user in database
+        data_manager.update_user(user_id, new_user)
+
+        return redirect(url_for('user.list_users'))
+
+    return render_template('update_user.html', user=user_data, user_id=user_id)
